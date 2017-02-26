@@ -1,0 +1,23 @@
+#include<iostream>
+#include<stack>
+#include<string>
+using namespace std;
+string a;
+stack<char> b;
+bool Islegal() {
+	for (int i = 0; i < a.size(); i++) {
+		if (a[i] == '(' || a[i] == '[')b.push(a[i]);
+		else {
+			if ((a[i] == ')'&&b.top() == '(')||(a[i] == ']'&&b.top() == '['))b.pop();
+			else return false;
+		}
+	}
+	if (b.empty())return true;
+}
+int main() {
+	cin >> a;
+	if (Islegal())printf("legal\n");
+	else printf("illegal\n");
+	system("pause");
+	return 0;
+}
