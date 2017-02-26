@@ -1,0 +1,36 @@
+#include<cstdio>
+#include<queue>
+using namespace std;
+struct node {
+	int line, colume;
+	int way;//从起点出发到该点的步数
+};
+int bfs(node start_point, node targe) {
+	queue<node> bfs_tree;
+	bfs_tree.push(start_point);
+	while (!bfs_tree.empty()) {
+		node tmp = bfs_tree.front();
+		bfs_tree.pop();
+		for (int i = -2; i <= 2; i++) {
+			for (int j = -2; j <= 2; j++) {
+				if (tmp.line + i > 0 && tmp.line + i < 9 && tmp.colume + j > 0 && tmp.colume + j < 9)//不越界
+					if (i != j&& i != - j&& i != 0 && j != 0) {//八个可行点
+						if (tmp.line + i == targe.line&&tmp.colume + j == targe.colume)return tmp.way + 1;
+						node next_point = { tmp.line + i,tmp.colume + j,tmp.way + 1 };
+						bfs_tree.push(next_point);
+					}
+			}
+		}
+	}
+}
+int main() {
+	char a, c;
+	int b, d;
+	scanf("%c%d %c%d", &a, &b, &c, &d);
+	node start_point = { a - 'a' + 1, b ,0};
+	node end_point = { c - 'a' + 1, d };
+	int best_way=bfs(start_point, end_point);
+	cout << best_way << endl;
+	system("pause");
+	return 0;
+}
