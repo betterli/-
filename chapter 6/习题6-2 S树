@@ -1,0 +1,21 @@
+#include<iostream>
+#include<string>
+#define maxn 1000
+using namespace std;
+string s;
+const int bin[] = {1, 2, 4, 8, 16, 32, 64, 128, 256, 512, 1024, 2048};
+int main() {
+	cin >> s;
+	int n;
+	while (cin >> n) {
+		int tmp,i;
+		tmp = i = 0;
+		while (n) {
+			tmp += (n % 10)*bin[i++];
+			n /= 10;
+		}
+		printf("%c", s[tmp]);//没有越界检查
+	}
+	printf("\n");
+	return 0;
+}
