@@ -1,0 +1,44 @@
+#include<iostream>
+#include<queue>
+using namespace std;
+struct  node
+{
+	int line, colume;
+	int balk;//跨过的障碍
+	int way;//步数
+};
+const int maxn = 20 + 10;
+int maze[maxn][maxn];
+int bfs(int m, int n, int k) {
+	queue<node> bfs;
+	node start_point = { 0, 0, 0, 0 };
+	bfs.push(start_point);
+	while (!bfs.empty()) {
+		node tmp = bfs.front();
+		bfs.pop();
+		for (int i = -1; i <= 1; i++) {
+			for (int j = -1; j <= 1; j++) {
+				if (tmp.line + i >= 0 && tmp.line + i < m && tmp.colume + j >= 0 && tmp.colume + j < n) {//不越界
+					if ((i != 0 || j != 0) && i != j && i != -j) { //四个可行点
+						if (tmp.line + i == m - 1 && tmp.colume + j == n - 1)return tmp.way + 1;
+						node next_point = { tmp.line + i,tmp.colume + j, tmp.balk,tmp.way + 1 };//跨过障碍计数器尚未被赋值
+						if (maze[tmp.line + i][tmp.colume + j] == 1) next_point.balk++;
+						else next_point.balk = 0;
+						if (next_point.balk <= k) bfs.push(next_point);
+					}
+				}
+			}
+		}
+	}
+}
+int main() {
+	int m, n, k;
+	cin >> m >> n >> k;
+	for (int i = 0; i < m; i++)
+		for (int j = 0; j < n; j++)
+			cin >> maze[i][j];
+	int way = bfs(m, n, k);
+	cout << way << endl;
+	system("pause");
+	return 0;
+}
