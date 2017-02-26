@@ -1,0 +1,33 @@
+#include<iostream>
+#include<string>
+#include<memory>
+#define maxn 26+10
+using namespace std;
+string PreOrder, InOrder, PostOrder;
+int lch[maxn], rch[maxn];
+int build(int l1, int r1, int l2, int r2) {
+	if (l1 > r1 )return -1;//空树，退出
+	int root = PreOrder[l1]-'A';
+	int i = l2;
+	while (InOrder[i] != PreOrder[l1])i++;
+	int length = i - l2;
+	lch[root]=build(l1 + 1, l1 + length, l2, i-1);
+	rch[root] = build(l1 + length + 1, r1, i + 1, r2);
+	return root;
+}
+//int tmp = 0;
+void PostOrderBuilt(int root) {
+	if (root == -1)return;
+	PostOrderBuilt(lch[root]);
+	PostOrderBuilt(rch[root]);
+	//PostOrder[tmp++] = root+'A';//这里可以考虑存储在PostOrder里
+	printf("%c", root + 'A');
+}
+int main() {
+	//clean();
+	while (cin >> PreOrder >> InOrder) {
+		int root = build(0, PreOrder.size() - 1, 0, InOrder.size() - 1);
+		PostOrderBuilt(root);
+	}
+	return 0;
+}
