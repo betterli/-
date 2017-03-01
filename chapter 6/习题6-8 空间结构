@@ -1,0 +1,58 @@
+//题目：https://vjudge.net/problem/35513
+//两种输入:   1），给你一颗树，让你输出所有黑色子节点对应路径的5进制数转换十进制然后排序之后的结果；
+//	                 2）， 给你每个黑色子节点路径对应的十进制数，输出二位正方形图。
+#include<iostream>
+#include<memory>
+#include<vector>
+using namespace std;
+const int maxn = 64 + 10;
+int arr[maxn][maxn];
+void init() {
+	for (int i = 1; i <= maxn; i++) {
+		memset(arr, 0, sizeof(arr[0]));
+	}
+}
+bool ToPicture(int n) {
+	//cout<<"n="<<n<<endl;
+	vector<int> list;
+	int x;
+	while (cin >> x&&x != -1) list.push_back(x);
+	while (!list.empty()) {
+		int tmp = list.back();
+		int flag = 0;
+		if (tmp == 14)flag = 1;
+		int a, b, c, d;//表示起始和终止的行列的值
+		a = b = 1;
+		c = d = n;
+		list.pop_back();
+		while (tmp) {
+			switch (tmp%5)
+			{
+			case 2:b = (b + d + 1) / 2; c = (a + c) / 2; break;
+			case 1: c = (a + c) / 2; d = (b + d) / 2; break;
+			case 3:a = (a + c + 1) / 2; d = (b + d) / 2; break;
+			case 4:a = (a + c + 1) / 2; b = (b + d + 1) / 2; break;
+			default:
+				break;
+			}
+			tmp /= 5;
+		}
+		for (int i = a; i <= c; i++)
+			for (int j = b; j <= d; j++)
+			{arr[i][j] = 1; if (flag)cout << "i=" << i << " j=" << j << endl;}
+	}
+	for (int i = 1; i <= n; i++) {
+		for (int j = 1; j <= n; j++)cout << arr[i][j] << " ";
+		cout << endl;
+	}
+	cout << endl;
+	return true;
+}
+int main() {
+	int n;
+	while (cin >> n) {
+		init();
+		if (n < 0)ToPicture(-n);
+	}
+	return 0;
+}
