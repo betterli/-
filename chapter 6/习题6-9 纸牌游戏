@@ -1,1 +1,86 @@
 
+#include<iostream>
+#include<vector>
+#include<string>
+#include<cstdio>
+using namespace std;
+//vector<string> pile[52];
+vector<string> pile[52];
+int refer[52];
+bool read_input() {
+	for (int i = 0; i < 52; i++) {
+		pile[i].clear();
+		string tmp;
+		cin >> tmp;
+		if (tmp == "#")return false;
+		pile[i].push_back(tmp);
+	}
+	return true;
+}
+int three_pile(int n) {
+	int flag = 0;
+	for (int i = n; i >= 0; i--) {
+		if (flag == 3)return i;
+		if (!pile[i].empty())flag++;
+	}
+	return -1;
+}
+int one_pile(int n) {
+	int flag = 0;
+	for (int i = n; i >= 0; i--) {
+		if (flag == 1)return i;
+		if (!pile[i].empty())flag++;
+	}
+	return -1;
+}
+bool move(const int i,const int start) {
+	string tmp,s1,s2;
+	s1 = pile[i].back();
+	s2 = pile[start].back();
+	if (s1[0] == s2[0] || s1[1] == s2[1]) {
+		tmp = pile[start].back();
+		pile[start].pop_back();
+		pile[i].push_back(tmp);
+		return true;
+	}
+	return false;
+}
+bool can_move(const int start) {
+	int i;
+	string tmp;
+	if (start == 0)return false;
+	//if (start >= 3 && (pile[start - 3].back[0] == pile[start].back[0] || pile[start - 3].back[1] == pile[start].back[1])) {}
+	i = three_pile(start);
+	if (i != -1) {
+		if(move(i, start))can_move(i);
+		return true;
+	}
+	i = one_pile(start);
+	if (i != -1) {
+		if(move(i, start))can_move(i);
+		return true;
+	}
+	return false;
+}
+int main() {
+	//string s;
+	while (read_input()) {
+		int i;
+		for (i = 0; i < 52; i++) {
+			if (can_move(i))i = 0;
+		}
+		int counter = 0;
+		for (i = 0; i < 52; i++) {
+			if (!pile[i].empty()) {
+				refer[i] = 1;
+				counter++;
+			}
+		}
+		cout << counter << " piles remaining: ";
+		for (i = 0; i < 52; i++) {
+			if (refer[i])cout << pile[i].size() << " ";
+		}
+		cout << endl;
+	}
+	return 0;
+}
